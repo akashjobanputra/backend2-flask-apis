@@ -27,5 +27,5 @@
 Use `flask test` to run tests.
 
 ## TODO:
-[] - Add tests for start, stop and restart  
-[] - Deploy on cloud for remote usage
+- [ ] - Add tests for start, stop and restart  
+- [ ] - Deploy on cloud for remote usage
