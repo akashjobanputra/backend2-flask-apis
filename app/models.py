@@ -59,7 +59,7 @@ class Machine(db.Model):
             'name': self.name,
             'ip_address': self.ip_address,
             'instance_type': self.instance_type,
-            'tags': [tag.to_json() for tag in self.tags],
+            'tags': [str(tag) for tag in self.tags],
             'state': self.state,
             'cluster_id': self.cluster_id
         }
@@ -75,6 +75,12 @@ class Machine(db.Model):
     def set_cluster_id(self, cluster_id):
         self.cluster_id = cluster_id
     
+    def start(self):
+        self.state = MachineState.ON
+
+    def stop(self):
+        self.state = MachineState.OFF
+
 
 class Tag(db.Model):
     __tablename__ = 'tags'
@@ -94,8 +100,13 @@ class Tag(db.Model):
     def from_json(json_post):
         return Tag(**json_post)
 
+    @property
+    def machine_count(self):
+        """Return the number of posts with this tag"""
+        return len(self.machine)
+
     def to_json(self):
-        return {'id': self.id, 'name': self.name}
+        return {'id': self.id, 'name': self.name, 'machine_count': self.machine_count}
 
     def __str__(self):
         return self.name
