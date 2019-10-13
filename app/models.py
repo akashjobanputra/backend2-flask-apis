@@ -23,14 +23,12 @@ class Cluster(db.Model):
             'id': self.id,
             'name': self.name,
             'cloud_region': self.cloud_region,
-            'machines': self.machines
+            'machines': [machine.to_json() for machine in self.machines]
         }
-        print(cluster_details)
         return cluster_details
 
     @staticmethod
     def from_json(json_post):
-        print(json_post)
         return Cluster(**json_post)
         # body = json_post.get('body')
         # if body is None or body == '':
@@ -69,7 +67,8 @@ class Machine(db.Model):
     def from_json(json_post):
         tags = [Tag.get_or_create(tag) for tag in json_post['tags']]
         json_post['tags'] = tags
-        json_post['ip_address'] = json_post['ip_adress'].lower()
+        json_post['ip_address'] = json_post['ip_address'].lower()
+        json_post['instance_type'] = json_post['instance_type'].lower()
         return Machine(**json_post)
 
     def set_cluster_id(self, cluster_id):
@@ -91,9 +90,9 @@ class Tag(db.Model):
     def get_or_create(cls, tag_name):
         """Only add tags to the database that don't exist yet. If tag already
         exists return a reference to the tag otherwise a new instance"""
-        tag = cls.query.filter(cls.name == tag_name).first()
+        tag = cls.query.filter(cls.name == tag_name.lower()).first()
         if not tag:
-            tag = cls(name=tag_name)
+            tag = cls(name=tag_name.lower())
         return tag
 
     @staticmethod
