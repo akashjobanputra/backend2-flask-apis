@@ -1,5 +1,5 @@
 # Restful APIs using flask
-
+[![Run in Postman](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/72140ce1c46e08743315)
 ## Configuration to run locally
 
 1. Install dependencies:
