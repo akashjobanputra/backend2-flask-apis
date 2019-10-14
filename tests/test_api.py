@@ -104,8 +104,7 @@ class APITestCase(unittest.TestCase):
         self.assertEqual(len(response.get_json()['tags']), 2)
 
         # Actual Operations
-        # Delete Operation
-        # Check length after deletion
+        # Machines greater than 0
         response = self.client.get("/api/machines/cache")
         self.assertEqual(response.status_code, 200)
         self.assertGreater(len(response.get_json()['machines']), 0)
