@@ -34,3 +34,4 @@ Testing will require that the environment variable FLASK_APP=backend2.py is prop
 ## TODO:
 - [X] - Add tests for start, stop.
 - [X] - Deploy on cloud for remote usage
+- [ ] - Add API Documentation
