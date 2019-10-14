@@ -1,2 +1,4 @@
 web: gunicorn backend2:f_app
-init: cd ~ && flask initdb
+init: flask db init
+migrate: flask db migrate
+upgrade: flask db upgrade
