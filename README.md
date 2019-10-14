@@ -1,6 +1,6 @@
 # Restful APIs using flask
 
-## Configuration to run
+## Configuration to run locally
 
 1. Install dependencies:
     ```sh
@@ -11,12 +11,15 @@
     ```sh
     export FLASK_APP=backend2.py
     export FLASK_APP='development'
+    export DATABASE_URL="postgresql://<USER>:<PASSWORD>@localhost/backend2test"
     ```
 
-3. Initialise database:
+3. Initialise database:  
+    Database needs to be created before running the migration scripts. As postgres does not create a database if the database with given name doesn't exist.
     ```sh
-    flask initdb
+    flask db upgrade
     ```
+    As migrations are already part of the repository, there is no need for `flask db init` and `flask db migrate`.
 
 4. Run flask's development server
     ```sh
@@ -28,4 +31,4 @@ Use `flask test` to run tests.
 
 ## TODO:
 - [X] - Add tests for start, stop.
-- [ ] - Deploy on cloud for remote usage
+- [X] - Deploy on cloud for remote usage
