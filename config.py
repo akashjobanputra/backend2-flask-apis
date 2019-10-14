@@ -6,7 +6,7 @@ class Config:
     SECRET_KEY = os.environ.get('SECRETY_KEY', 'hard to guess string')
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SQLALCHEMY_RECORD_QUERIES = True
-    SQLALCHEMY_DATABASE_URI = os.environ['DATABASE_URL']
+    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL')
 
     @staticmethod
     def init_app(app):
