@@ -13,7 +13,7 @@ class Cluster(db.Model):
     __tablename__ = 'clusters'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(150), nullable=False)
-    cloud_region = db.Column(db.String(5), nullable=False)
+    cloud_region = db.Column(db.String(50), nullable=False)
     # machines = db.relationship('Machine', backref='cluster', lazy='dynamic')
     machines = db.relationship('Machine', backref='cluster', lazy=True)
     creation_date = db.Column(db.TIMESTAMP, server_default=db.func.current_timestamp(), nullable=False)
