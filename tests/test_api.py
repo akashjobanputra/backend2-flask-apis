@@ -1,7 +1,7 @@
 import unittest
 import json
 from app import create_app, db
-from app.models import Machine, Cluster, Tag
+from app.models import Machine, Cluster, Tag, MachineState
 
 machines = [
     {
@@ -109,6 +109,22 @@ class APITestCase(unittest.TestCase):
         response = self.client.get("/api/machines/cache")
         self.assertEqual(response.status_code, 200)
         self.assertGreater(len(response.get_json()['machines']), 0)
+
+        response = self.client.post("/api/machines/cache/stop")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.get_json()['message'], 'Operation Successful.')
+
+        response = self.client.get("/api/machines/cache")
+        self.assertEqual(response.status_code, 200)
+        self.assertIs(all(machine['state'] == MachineState.OFF for machine in response.get_json()['machines']), True)
+
+        response = self.client.post("/api/machines/cache/start")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.get_json()['message'], 'Operation Successful.')
+
+        response = self.client.get("/api/machines/cache")
+        self.assertEqual(response.status_code, 200)
+        self.assertIs(all(machine['state'] == MachineState.ON for machine in response.get_json()['machines']), True)
 
         # Delete
         response = self.client.post("/api/machines/cache/delete")
