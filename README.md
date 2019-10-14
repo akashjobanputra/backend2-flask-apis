@@ -29,7 +29,7 @@
     ```
 
 ## Testing
-Testing will require that the environment variable FLASK_APP=backend2.py is properly set. Then use `flask test` to run tests.
+Testing will require that the environment variable FLASK_APP=backend2.py is properly set. Testing will be done in an in-memory database, so no need to specify DATABASE_URL for that. Use `flask test` to run tests.
 
 ## TODO:
 - [X] - Add tests for start, stop.
