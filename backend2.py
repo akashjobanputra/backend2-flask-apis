@@ -1,9 +1,11 @@
 import os
 from flask_migrate import Migrate, upgrade, MigrateCommand
+from flasgger import Swagger
 from app import create_app, db
 from app.models import Machine, Tag, Cluster    # not used in this file, but still required so flask_migrate can work
 
 f_app = create_app(os.getenv('FLASK_CONFIG') or 'default')
+swagger = Swagger(f_app)
 migrate = Migrate(f_app, db)
 
 f_app.cli.add_command('db', MigrateCommand)

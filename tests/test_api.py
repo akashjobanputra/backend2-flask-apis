@@ -43,11 +43,11 @@ class APITestCase(unittest.TestCase):
         self.assertEqual(response.get_json()['error'], 'not found')
 
     def test_clusters(self):
-        response = self.client.get('/api/clusters')
+        response = self.client.get('/api/clusters/', follow_redirects=True)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(response.get_json()['clusters']), 0)
 
-        response = self.client.post('/api/clusters',
+        response = self.client.post('/api/clusters//',
                                     data=json.dumps(cluster),
                                     content_type='application/json')
         self.assertEqual(response.status_code, 201)
@@ -55,33 +55,33 @@ class APITestCase(unittest.TestCase):
         self.assertEqual(len(response.get_json()['machines']), 0)
 
         # add machines to cluster
-        response = self.client.post("/api/clusters/1/machines",
+        response = self.client.post("/api/clusters/1/machines/",
                                     data=json.dumps(machines[0]),
                                     content_type='application/json')
         self.assertEqual(response.status_code, 201)
         self.assertEqual(response.get_json()['id'], 1)
         self.assertEqual(len(response.get_json()['tags']), 3)
 
-        response = self.client.post("/api/clusters/1/machines",
+        response = self.client.post("/api/clusters/1/machines/",
                                     data=json.dumps(machines[1]),
                                     content_type='application/json')
         self.assertEqual(response.status_code, 201)
         self.assertEqual(response.get_json()['id'], 2)
         self.assertEqual(len(response.get_json()['tags']), 2)
 
-        response = self.client.get('/api/clusters/1')
+        response = self.client.get('/api/clusters/1/')
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(response.get_json()['cluster']['machines']), 2)
 
         # Check tags in machine
-        response = self.client.get('/api/clusters/1/machines')
+        response = self.client.get('/api/clusters/1/machines/')
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(response.get_json()['machines'][0]['tags']), 3)
         self.assertIn('dev', response.get_json()['machines'][0]['tags'])
 
     def test_machine_operations(self):
         # Adding Data
-        response = self.client.post('/api/clusters',
+        response = self.client.post('/api/clusters/',
                                     data=json.dumps(cluster),
                                     content_type='application/json')
         self.assertEqual(response.status_code, 201)
@@ -89,14 +89,14 @@ class APITestCase(unittest.TestCase):
         self.assertEqual(len(response.get_json()['machines']), 0)
 
         # add machines to cluster
-        response = self.client.post("/api/clusters/1/machines",
+        response = self.client.post("/api/clusters/1/machines/",
                                     data=json.dumps(machines[0]),
                                     content_type='application/json')
         self.assertEqual(response.status_code, 201)
         self.assertEqual(response.get_json()['id'], 1)
         self.assertEqual(len(response.get_json()['tags']), 3)
 
-        response = self.client.post("/api/clusters/1/machines",
+        response = self.client.post("/api/clusters/1/machines/",
                                     data=json.dumps(machines[1]),
                                     content_type='application/json')
         self.assertEqual(response.status_code, 201)
@@ -105,32 +105,32 @@ class APITestCase(unittest.TestCase):
 
         # Actual Operations
         # Machines greater than 0
-        response = self.client.get("/api/machines/cache")
+        response = self.client.get("/api/machines/cache/")
         self.assertEqual(response.status_code, 200)
         self.assertGreater(len(response.get_json()['machines']), 0)
 
-        response = self.client.post("/api/machines/cache/stop")
+        response = self.client.post("/api/machines/cache/stop/")
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.get_json()['message'], 'Operation Successful.')
 
-        response = self.client.get("/api/machines/cache")
+        response = self.client.get("/api/machines/cache/")
         self.assertEqual(response.status_code, 200)
         self.assertIs(all(machine['state'] == MachineState.OFF for machine in response.get_json()['machines']), True)
 
-        response = self.client.post("/api/machines/cache/start")
+        response = self.client.post("/api/machines/cache/start/")
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.get_json()['message'], 'Operation Successful.')
 
-        response = self.client.get("/api/machines/cache")
+        response = self.client.get("/api/machines/cache/")
         self.assertEqual(response.status_code, 200)
         self.assertIs(all(machine['state'] == MachineState.ON for machine in response.get_json()['machines']), True)
 
         # Delete
-        response = self.client.post("/api/machines/cache/delete")
+        response = self.client.post("/api/machines/cache/delete/")
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.get_json()['message'], 'Operation Successful.')
 
         # Check length after deletion
-        response = self.client.get("/api/machines/cache")
+        response = self.client.get("/api/machines/cache/")
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(response.get_json()['machines']), 0)

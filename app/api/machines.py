@@ -4,7 +4,7 @@ from .. import db
 from . import api
 
 
-@api.route('/clusters/<int:cluster_id>/machines')
+@api.route('/clusters/<int:cluster_id>/machines/')
 def get_machines(cluster_id):
     cluster = Cluster.query.filter_by(id=cluster_id).first_or_404()
     return jsonify({
@@ -12,7 +12,7 @@ def get_machines(cluster_id):
     })
 
 
-@api.route('/clusters/<int:cluster_id>/machines', methods=['POST'])
+@api.route('/clusters/<int:cluster_id>/machines/', methods=['POST'])
 def new_machine(cluster_id):
     cluster = Cluster.query.filter_by(id=cluster_id).first_or_404()
     machine = Machine.from_json(request.json)
@@ -22,7 +22,7 @@ def new_machine(cluster_id):
     return jsonify(machine.to_json()), 201
 
 
-@api.route('/machines/<string:tag>')
+@api.route('/machines/<string:tag>/')
 def get_machines_by_tag(tag):
     tag = Tag.query.filter_by(name=tag.lower()).first_or_404()
     result = {
@@ -31,7 +31,7 @@ def get_machines_by_tag(tag):
     return jsonify(result)
 
 
-@api.route('/machines/<string:tag>/start', methods=['POST'])
+@api.route('/machines/<string:tag>/start/', methods=['POST'])
 def start_machines(tag):
     tag = Tag.query.filter_by(name=tag.lower()).first_or_404()
     for machine in tag.machine:
@@ -40,7 +40,7 @@ def start_machines(tag):
     return {'message': 'Operation Successful.'}
 
 
-@api.route('/machines/<string:tag>/stop', methods=['POST'])
+@api.route('/machines/<string:tag>/stop/', methods=['POST'])
 def stop_machines(tag):
     tag = Tag.query.filter_by(name=tag.lower()).first_or_404()
     for machine in tag.machine:
@@ -49,7 +49,7 @@ def stop_machines(tag):
     return {'message': 'Operation Successful.'}
 
 
-@api.route('/machines/<string:tag>/restart', methods=['POST'])
+@api.route('/machines/<string:tag>/restart/', methods=['POST'])
 def restart_machines(tag):
     tag = Tag.query.filter_by(name=tag.lower()).first_or_404()
     for machine in tag.machine:
@@ -61,7 +61,7 @@ def restart_machines(tag):
     return {'message': 'Operation Successful.'}
 
 
-@api.route('/machines/<string:tag>/delete', methods=['POST'])
+@api.route('/machines/<string:tag>/delete/', methods=['POST'])
 def delete_machines(tag):
     tag = Tag.query.filter_by(name=tag.lower()).first_or_404()
     for machine in tag.machine:
